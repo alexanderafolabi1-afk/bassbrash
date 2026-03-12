@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bass Brash — Where Artists Get Heard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --black: #080808;
+    --off-black: #111111;
+    --panel: #161616;
+    --border: #2a2a2a;
+    --orange: #FF4D00;
+    --gold: #FFB800;
+    --white: #F5F0E8;
+    --muted: #888;
+    --green: #00FF87;
+  }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(–black);
+color: var(–white);
+font-family: ‘Syne’, sans-serif;
+overflow-x: hidden;
+cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+width: 12px; height: 12px;
+background: var(–orange);
+border-radius: 50%;
+position: fixed;
+pointer-events: none;
+z-index: 9999;
+transition: transform 0.15s ease, background 0.2s;
+transform: translate(-50%, -50%);
+}
+.cursor-ring {
+width: 36px; height: 36px;
+border: 1px solid rgba(255,77,0,0.5);
+border-radius: 50%;
+position: fixed;
+pointer-events: none;
+z-index: 9998;
+transition: transform 0.35s ease, width 0.3s, height 0.3s;
+transform: translate(-50%, -50%);
+}
+a:hover ~ .cursor, button:hover ~ .cursor { transform: translate(-50%,-50%) scale(2.5); background: var(–gold); }
+
+/* Grain overlay */
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.04’/%3E%3C/svg%3E”);
+pointer-events: none;
+z-index: 1000;
+opacity: 0.35;
+}
+
+/* NAV */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 900;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 1.2rem 3rem;
+border-bottom: 1px solid var(–border);
+background: rgba(8,8,8,0.92);
+backdrop-filter: blur(12px);
+}
+.logo {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 2rem;
+letter-spacing: 0.08em;
+color: var(–white);
+text-decoration: none;
+display: flex;
+align-items: center;
+gap: 0.4rem;
+}
+.logo span { color: var(–orange); }
+.nav-links {
+display: flex;
+gap: 2.5rem;
+list-style: none;
+}
+.nav-links a {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.72rem;
+color: var(–muted);
+text-decoration: none;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+transition: color 0.2s;
+}
+.nav-links a:hover { color: var(–white); }
+.nav-cta {
+background: var(–orange);
+color: var(–black) !important;
+padding: 0.5rem 1.2rem;
+font-weight: 700 !important;
+color: var(–black);
+transition: background 0.2s !important;
+}
+.nav-cta:hover { background: var(–gold) !important; color: var(–black) !important; }
+
+/* HERO */
+.hero {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+padding: 0 3rem 5rem;
+position: relative;
+overflow: hidden;
+}
+.hero-bg {
+position: absolute;
+inset: 0;
+background: radial-gradient(ellipse at 70% 40%, rgba(255,77,0,0.12) 0%, transparent 60%),
+radial-gradient(ellipse at 20% 80%, rgba(255,184,0,0.07) 0%, transparent 50%);
+}
+.waveform {
+position: absolute;
+top: 50%;
+left: 0; right: 0;
+transform: translateY(-50%);
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 3px;
+height: 220px;
+opacity: 0.06;
+}
+.waveform .bar {
+width: 3px;
+background: var(–orange);
+border-radius: 2px;
+animation: wave 1.4s ease-in-out infinite;
+}
+@keyframes wave {
+0%, 100% { height: 20%; }
+50% { height: 100%; }
+}
+.hero-tag {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.7rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(–orange);
+margin-bottom: 1.5rem;
+animation: fadeUp 0.8s ease both;
+}
+.hero-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(4rem, 12vw, 11rem);
+line-height: 0.92;
+letter-spacing: -0.01em;
+color: var(–white);
+animation: fadeUp 0.9s ease 0.1s both;
+}
+.hero-title em {
+font-style: normal;
+color: var(–orange);
+display: block;
+}
+.hero-sub {
+font-size: 1.1rem;
+color: var(–muted);
+max-width: 540px;
+margin-top: 1.8rem;
+line-height: 1.7;
+animation: fadeUp 1s ease 0.2s both;
+}
+.hero-actions {
+display: flex;
+gap: 1rem;
+margin-top: 2.5rem;
+animation: fadeUp 1s ease 0.3s both;
+}
+.btn-primary {
+background: var(–orange);
+color: var(–black);
+font-family: ‘Syne’, sans-serif;
+font-weight: 800;
+font-size: 0.85rem;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+padding: 1rem 2.2rem;
+text-decoration: none;
+border: none;
+cursor: none;
+transition: background 0.2s, transform 0.15s;
+display: inline-block;
+}
+.btn-primary:hover { background: var(–gold); transform: translateY(-2px); }
+.btn-outline {
+border: 1px solid var(–border);
+color: var(–white);
+font-family: ‘Syne’, sans-serif;
+font-weight: 600;
+font-size: 0.85rem;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+padding: 1rem 2.2rem;
+text-decoration: none;
+background: transparent;
+cursor: none;
+transition: border-color 0.2s, transform 0.15s;
+display: inline-block;
+}
+.btn-outline:hover { border-color: var(–white); transform: translateY(-2px); }
+.scroll-indicator {
+position: absolute;
+bottom: 2rem; right: 3rem;
+font-family: ‘Space Mono’, monospace;
+font-size: 0.65rem;
+color: var(–muted);
+letter-spacing: 0.15em;
+text-transform: uppercase;
+writing-mode: vertical-rl;
+animation: fadeUp 1.2s ease 0.5s both;
+}
+
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* TICKER */
+.ticker {
+border-top: 1px solid var(–border);
+border-bottom: 1px solid var(–border);
+background: var(–panel);
+padding: 1rem 0;
+overflow: hidden;
+white-space: nowrap;
+}
+.ticker-inner {
+display: inline-flex;
+gap: 3rem;
+animation: ticker 30s linear infinite;
+}
+.ticker-item {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 1.1rem;
+letter-spacing: 0.1em;
+color: var(–muted);
+}
+.ticker-item span { color: var(–orange); margin-right: 0.5rem; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* SECTIONS */
+section { padding: 7rem 3rem; }
+.section-label {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.68rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(–orange);
+margin-bottom: 1rem;
+}
+.section-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(2.5rem, 5vw, 4.5rem);
+line-height: 1;
+letter-spacing: 0.02em;
+color: var(–white);
+margin-bottom: 1rem;
+}
+
+/* SERVICES */
+#services { background: var(–off-black); }
+.services-intro {
+max-width: 600px;
+color: var(–muted);
+line-height: 1.8;
+margin-bottom: 4rem;
+font-size: 1.05rem;
+}
+.services-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 1px;
+border: 1px solid var(–border);
+}
+.service-card {
+background: var(–panel);
+padding: 2.2rem;
+border: none;
+position: relative;
+overflow: hidden;
+transition: background 0.2s;
+}
+.service-card::before {
+content: ‘’;
+position: absolute;
+bottom: 0; left: 0;
+height: 2px;
+width: 0;
+background: var(–orange);
+transition: width 0.4s ease;
+}
+.service-card:hover::before { width: 100%; }
+.service-card:hover { background: #1c1c1c; }
+.service-number {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.65rem;
+color: var(–orange);
+letter-spacing: 0.15em;
+margin-bottom: 1.2rem;
+}
+.service-name {
+font-family: ‘Syne’, sans-serif;
+font-weight: 800;
+font-size: 1.15rem;
+color: var(–white);
+margin-bottom: 0.6rem;
+}
+.service-desc {
+font-size: 0.88rem;
+color: var(–muted);
+line-height: 1.7;
+margin-bottom: 1.5rem;
+}
+.service-price {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 2rem;
+color: var(–gold);
+letter-spacing: 0.05em;
+}
+.service-price small {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.7rem;
+color: var(–muted);
+letter-spacing: 0.1em;
+vertical-align: middle;
+margin-left: 0.3rem;
+}
+.service-tag {
+display: inline-block;
+font-family: ‘Space Mono’, monospace;
+font-size: 0.6rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+padding: 0.25rem 0.6rem;
+border: 1px solid var(–green);
+color: var(–green);
+margin-top: 0.8rem;
+}
+
+/* SUBMIT */
+#submit {
+background: var(–black);
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 5rem;
+align-items: center;
+}
+.submit-form {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
+.form-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1rem;
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+width: 100%;
+background: var(–panel);
+border: 1px solid var(–border);
+color: var(–white);
+font-family: ‘Syne’, sans-serif;
+font-size: 0.9rem;
+padding: 0.9rem 1.1rem;
+outline: none;
+transition: border-color 0.2s;
+appearance: none;
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: var(–muted); }
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus { border-color: var(–orange); }
+.form-field select option { background: var(–panel); }
+.form-field textarea { height: 100px; resize: vertical; }
+.form-field label {
+display: block;
+font-family: ‘Space Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 0.4rem;
+}
+.submit-side-text {
+color: var(–muted);
+line-height: 1.8;
+font-size: 1rem;
+}
+.submit-side-text strong { color: var(–white); font-weight: 700; }
+.submit-big {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(3rem, 6vw, 5.5rem);
+color: var(–white);
+line-height: 0.95;
+margin-bottom: 1.5rem;
+}
+.submit-big em { font-style: normal; color: var(–orange); }
+.genre-tags {
+display: flex;
+flex-wrap: wrap;
+gap: 0.5rem;
+margin: 1.5rem 0;
+}
+.genre-tag {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.08em;
+padding: 0.3rem 0.8rem;
+border: 1px solid var(–border);
+color: var(–muted);
+text-transform: uppercase;
+cursor: none;
+transition: all 0.2s;
+}
+.genre-tag:hover, .genre-tag.active {
+border-color: var(–orange);
+color: var(–orange);
+}
+
+/* BEATS */
+#beats { background: var(–off-black); }
+.beats-table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 2.5rem;
+}
+.beats-table th {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: var(–muted);
+text-align: left;
+padding: 0.8rem 1.2rem;
+border-bottom: 1px solid var(–border);
+}
+.beats-table td {
+padding: 1.2rem;
+border-bottom: 1px solid var(–border);
+font-size: 0.9rem;
+vertical-align: middle;
+}
+.beats-table tr:hover td { background: var(–panel); }
+.beat-name { font-weight: 700; color: var(–white); }
+.beat-genre {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.65rem;
+color: var(–muted);
+letter-spacing: 0.1em;
+text-transform: uppercase;
+}
+.beat-price {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 1.4rem;
+color: var(–gold);
+}
+.play-btn {
+width: 36px; height: 36px;
+border-radius: 50%;
+background: var(–border);
+border: none;
+cursor: none;
+display: flex;
+align-items: center;
+justify-content: center;
+color: var(–white);
+font-size: 0.75rem;
+transition: background 0.2s;
+}
+.play-btn:hover { background: var(–orange); }
+.beats-cta {
+text-align: center;
+margin-top: 3rem;
+}
+.beats-cta p { color: var(–muted); font-size: 0.9rem; margin-bottom: 1rem; }
+
+/* SPOTLIGHT */
+#spotlight { background: var(–black); }
+.spotlight-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 1.5rem;
+margin-top: 3rem;
+}
+.spotlight-card {
+background: var(–panel);
+border: 1px solid var(–border);
+overflow: hidden;
+transition: transform 0.2s;
+}
+.spotlight-card:hover { transform: translateY(-4px); }
+.spotlight-img {
+height: 200px;
+background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 4rem;
+color: var(–border);
+position: relative;
+overflow: hidden;
+}
+.spotlight-img::after {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: linear-gradient(to bottom, transparent 50%, var(–panel));
+}
+.spotlight-body { padding: 1.2rem; }
+.spotlight-genre {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.6rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: var(–orange);
+margin-bottom: 0.5rem;
+}
+.spotlight-artist {
+font-weight: 800;
+font-size: 1.1rem;
+color: var(–white);
+margin-bottom: 0.3rem;
+}
+.spotlight-track {
+font-size: 0.82rem;
+color: var(–muted);
+font-style: italic;
+}
+.spotlight-open {
+display: flex;
+align-items: center;
+gap: 1rem;
+border: 2px dashed var(–border);
+border-radius: 0;
+padding: 2rem;
+justify-content: center;
+flex-direction: column;
+text-align: center;
+cursor: none;
+transition: border-color 0.2s;
+min-height: 300px;
+}
+.spotlight-open:hover { border-color: var(–orange); }
+.spotlight-open-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.spotlight-open-text {
+font-family: ‘Syne’, sans-serif;
+font-weight: 700;
+color: var(–muted);
+font-size: 0.85rem;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+}
+.spotlight-open-price {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 1.8rem;
+color: var(–gold);
+}
+
+/* REVENUE */
+#revenue { background: var(–panel); }
+.revenue-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+gap: 1.5rem;
+margin-top: 3rem;
+}
+.revenue-card {
+padding: 1.8rem;
+border: 1px solid var(–border);
+background: var(–off-black);
+}
+.revenue-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+.revenue-title {
+font-weight: 800;
+font-size: 0.95rem;
+color: var(–white);
+margin-bottom: 0.5rem;
+}
+.revenue-desc {
+font-size: 0.82rem;
+color: var(–muted);
+line-height: 1.6;
+}
+.revenue-amount {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 1.4rem;
+color: var(–green);
+margin-top: 1rem;
+}
+
+/* ABOUT */
+#about {
+background: var(–black);
+border-top: 1px solid var(–border);
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 5rem;
+align-items: center;
+}
+.about-text {
+color: var(–muted);
+line-height: 1.9;
+font-size: 1rem;
+}
+.about-text p { margin-bottom: 1.2rem; }
+.about-text strong { color: var(–white); }
+.stats-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1px;
+border: 1px solid var(–border);
+}
+.stat-cell {
+background: var(–panel);
+padding: 2rem;
+text-align: center;
+}
+.stat-number {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 3rem;
+color: var(–orange);
+line-height: 1;
+}
+.stat-label {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(–muted);
+margin-top: 0.4rem;
+}
+
+/* CONTACT */
+#contact {
+background: var(–orange);
+padding: 5rem 3rem;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 3rem;
+}
+.contact-text {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(2.5rem, 5vw, 4rem);
+color: var(–black);
+line-height: 1;
+}
+.contact-text em { font-style: normal; display: block; }
+.contact-actions { display: flex; gap: 1rem; flex-shrink: 0; }
+.btn-dark {
+background: var(–black);
+color: var(–white);
+font-family: ‘Syne’, sans-serif;
+font-weight: 800;
+font-size: 0.82rem;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+padding: 1rem 2rem;
+text-decoration: none;
+border: none;
+cursor: none;
+transition: background 0.2s, transform 0.15s;
+display: inline-block;
+}
+.btn-dark:hover { background: #1a1a1a; transform: translateY(-2px); }
+.btn-white {
+background: var(–white);
+color: var(–black);
+font-family: ‘Syne’, sans-serif;
+font-weight: 800;
+font-size: 0.82rem;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+padding: 1rem 2rem;
+text-decoration: none;
+border: none;
+cursor: none;
+transition: opacity 0.2s, transform 0.15s;
+display: inline-block;
+}
+.btn-white:hover { opacity: 0.85; transform: translateY(-2px); }
+
+/* FOOTER */
+footer {
+background: var(–off-black);
+border-top: 1px solid var(–border);
+padding: 2.5rem 3rem;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+.footer-logo {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 1.5rem;
+color: var(–white);
+letter-spacing: 0.08em;
+}
+.footer-logo span { color: var(–orange); }
+.footer-links {
+display: flex;
+gap: 2rem;
+list-style: none;
+}
+.footer-links a {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(–muted);
+text-decoration: none;
+transition: color 0.2s;
+}
+.footer-links a:hover { color: var(–white); }
+.footer-copy {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.62rem;
+color: var(–muted);
+letter-spacing: 0.08em;
+}
+
+/* NOTIFICATION POPUP */
+.notify-popup {
+position: fixed;
+bottom: 2rem;
+left: 2rem;
+background: var(–panel);
+border: 1px solid var(–border);
+border-left: 3px solid var(–green);
+padding: 1rem 1.5rem;
+z-index: 800;
+max-width: 280px;
+animation: slideIn 0.4s ease;
+opacity: 0;
+transition: opacity 0.3s;
+}
+.notify-popup.show { opacity: 1; }
+.notify-title {
+font-size: 0.78rem;
+font-weight: 700;
+color: var(–white);
+margin-bottom: 0.2rem;
+}
+.notify-sub {
+font-family: ‘Space Mono’, monospace;
+font-size: 0.62rem;
+color: var(–muted);
+letter-spacing: 0.06em;
+}
+.notify-dot {
+width: 6px; height: 6px;
+background: var(–green);
+border-radius: 50%;
+display: inline-block;
+margin-right: 0.4rem;
+animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.3; }
+}
+@keyframes slideIn {
+from { transform: translateX(-20px); opacity: 0; }
+to { transform: translateX(0); opacity: 1; }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+nav { padding: 1rem 1.5rem; }
+.nav-links { display: none; }
+section { padding: 4rem 1.5rem; }
+.hero { padding: 0 1.5rem 4rem; }
+#submit, #about { grid-template-columns: 1fr; gap: 3rem; }
+.form-row { grid-template-columns: 1fr; }
+.spotlight-grid { grid-template-columns: 1fr; }
+#contact { flex-direction: column; align-items: flex-start; }
+footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NOTIFICATION -->
+
+<div class="notify-popup" id="notify">
+  <div class="notify-title"><span class="notify-dot"></span>New submission received</div>
+  <div class="notify-sub">Afrobeats · Lagos, NG · 2 min ago</div>
+</div>
+
+<!-- NAV -->
+
+<nav>
+  <a href="#" class="logo">BASS<span>BRASH</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#beats">Beat Market</a></li>
+    <li><a href="#spotlight">Spotlight</a></li>
+    <li><a href="#submit">Submit Music</a></li>
+    <li><a href="#contact" class="nav-cta">Get Featured</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="waveform" id="waveform"></div>
+  <div style="position:relative; z-index:2;">
+    <p class="hero-tag">▶ Global Music Platform — Every Genre, Every Culture</p>
+    <h1 class="hero-title">Where Artists<em>Get Heard.</em></h1>
+    <p class="hero-sub">Bass Brash is the home for independent artists worldwide. Features, press releases, beat licensing, playlist pitching — everything your music career needs, in one place.</p>
+    <div class="hero-actions">
+      <a href="#submit" class="btn-primary">Submit Your Music</a>
+      <a href="#services" class="btn-outline">View Services</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">Scroll to explore</div>
+</section>
+
+<!-- TICKER -->
+
+<div class="ticker">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item"><span>◆</span> Afrobeats</span>
+    <span class="ticker-item"><span>◆</span> Hip-Hop</span>
+    <span class="ticker-item"><span>◆</span> Electronic</span>
+    <span class="ticker-item"><span>◆</span> R&B / Soul</span>
+    <span class="ticker-item"><span>◆</span> Indie / Alternative</span>
+    <span class="ticker-item"><span>◆</span> Drill</span>
+    <span class="ticker-item"><span>◆</span> K-Pop</span>
+    <span class="ticker-item"><span>◆</span> Latin</span>
+    <span class="ticker-item"><span>◆</span> Classical Crossover</span>
+    <span class="ticker-item"><span>◆</span> Metal</span>
+    <span class="ticker-item"><span>◆</span> Country</span>
+    <span class="ticker-item"><span>◆</span> Jazz</span>
+    <span class="ticker-item"><span>◆</span> Pop</span>
+    <span class="ticker-item"><span>◆</span> Amapiano</span>
+    <span class="ticker-item"><span>◆</span> Grime</span>
+    <span class="ticker-item"><span>◆</span> Afrobeats</span>
+    <span class="ticker-item"><span>◆</span> Hip-Hop</span>
+    <span class="ticker-item"><span>◆</span> Electronic</span>
+    <span class="ticker-item"><span>◆</span> R&B / Soul</span>
+    <span class="ticker-item"><span>◆</span> Indie / Alternative</span>
+    <span class="ticker-item"><span>◆</span> Drill</span>
+    <span class="ticker-item"><span>◆</span> K-Pop</span>
+    <span class="ticker-item"><span>◆</span> Latin</span>
+    <span class="ticker-item"><span>◆</span> Classical Crossover</span>
+    <span class="ticker-item"><span>◆</span> Metal</span>
+    <span class="ticker-item"><span>◆</span> Country</span>
+    <span class="ticker-item"><span>◆</span> Jazz</span>
+    <span class="ticker-item"><span>◆</span> Pop</span>
+    <span class="ticker-item"><span>◆</span> Amapiano</span>
+    <span class="ticker-item"><span>◆</span> Grime</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+
+<section id="services">
+  <p class="section-label">01 — What We Do</p>
+  <h2 class="section-title">Services & Pricing</h2>
+  <p class="services-intro">Every service is designed for independent artists who need results without gatekeepers. No label required. No geography required. Every genre welcome.</p>
+  <div class="services-grid">
+
+```
+<div class="service-card">
+  <p class="service-number">01 — FEATURE</p>
+  <h3 class="service-name">Artist Spotlight Feature</h3>
+  <p class="service-desc">A dedicated editorial feature on Bass Brash — written review, embedded stream, bio, links, and social promotion. Indexed on Google. Stays live permanently.</p>
+  <div class="service-price">£35 <small>/ feature</small></div>
+  <span class="service-tag">✦ Day 1 Revenue</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">02 — PRESS</p>
+  <h3 class="service-name">Music Press Release</h3>
+  <p class="service-desc">Professional press release written and distributed. Perfect for single/EP/album launches. Sent to blogs, playlists, and media outlets in your genre and region.</p>
+  <div class="service-price">£55 <small>/ release</small></div>
+  <span class="service-tag">✦ Day 1 Revenue</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">03 — EPK</p>
+  <h3 class="service-name">Electronic Press Kit</h3>
+  <p class="service-desc">A polished EPK built to get you booked and taken seriously by venues, festivals, promoters, and labels. PDF + link format. Turnaround: 48 hours.</p>
+  <div class="service-price">£95 <small>/ EPK</small></div>
+  <span class="service-tag">✦ High Demand</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">04 — PLAYLIST</p>
+  <h3 class="service-name">Spotify Playlist Pitching</h3>
+  <p class="service-desc">We pitch your track to relevant Spotify playlist curators within your genre. Transparent reporting on submissions. No fake streams — real curators only.</p>
+  <div class="service-price">£45 <small>/ campaign</small></div>
+  <span class="service-tag">✦ Global</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">05 — SYNC</p>
+  <h3 class="service-name">Sync Licensing Intro</h3>
+  <p class="service-desc">We connect your music with filmmakers, YouTubers, ad agencies, and content creators actively seeking tracks. You retain rights. We take 15% on successful placements only.</p>
+  <div class="service-price">15% <small>/ placement</small></div>
+  <span class="service-tag">✦ No Upfront Cost</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">06 — SHOWCASE</p>
+  <h3 class="service-name">Bass Brash Live Showcase</h3>
+  <p class="service-desc">Monthly online showcase. Artists perform a 10-min set streamed to our audience. Viewers attend free. Clips are posted to all platforms. Limited slots per show.</p>
+  <div class="service-price">£60 <small>/ slot</small></div>
+  <span class="service-tag">✦ Monthly</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">07 — REVIEW</p>
+  <h3 class="service-name">SubmitHub Review</h3>
+  <p class="service-desc">Submit your track through SubmitHub for an honest, detailed written review by the Bass Brash editorial team. Accepted tracks get a full feature. All genres.</p>
+  <div class="service-price">Credits <small>via SubmitHub</small></div>
+  <span class="service-tag">✦ Live Now</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">08 — BEATS</p>
+  <h3 class="service-name">Beat Marketplace</h3>
+  <p class="service-desc">Producers list beats. Artists buy direct. Bass Brash takes 15% commission on every sale. Lease and exclusive options. All genres and BPMs.</p>
+  <div class="service-price">15% <small>/ sale</small></div>
+  <span class="service-tag">✦ Passive Income</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">09 — ADS</p>
+  <h3 class="service-name">Banner & Newsletter Ads</h3>
+  <p class="service-desc">Studios, music schools, equipment brands, and distribution services advertise directly on Bass Brash. Monthly and per-placement rates. Audience targeted by genre.</p>
+  <div class="service-price">£80 <small>/ month</small></div>
+  <span class="service-tag">✦ Scales With Traffic</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">10 — DISTRO</p>
+  <h3 class="service-name">Distribution Referrals</h3>
+  <p class="service-desc">We refer artists to DistroKid, TuneCore, and Amuse via affiliate links embedded naturally in content. Earns commission every time an artist signs up through Bass Brash.</p>
+  <div class="service-price">Passive <small>/ affiliate</small></div>
+  <span class="service-tag">✦ Automated</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">11 — STUDIO</p>
+  <h3 class="service-name">Studio Booking Referrals</h3>
+  <p class="service-desc">We partner with local recording studios across the UK and globally. Artists book through Bass Brash. Studios pay us a referral commission per booking.</p>
+  <div class="service-price">10–20% <small>/ booking</small></div>
+  <span class="service-tag">✦ UK & Global</span>
+</div>
+
+<div class="service-card">
+  <p class="service-number">12 — BUNDLE</p>
+  <h3 class="service-name">Launch Bundle</h3>
+  <p class="service-desc">Feature + Press Release + Playlist Pitch all in one. Best value for artists dropping new music. Our most popular package — results within 7 days of purchase.</p>
+  <div class="service-price">£120 <small>/ bundle</small></div>
+  <span class="service-tag">✦ Best Value</span>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- SUBMIT -->
+
+<section id="submit">
+  <div>
+    <p class="section-label">02 — Get Featured</p>
+    <h2 class="submit-big">Your Music.<em>Our Platform.</em></h2>
+    <p class="submit-side-text">
+      <strong>Bass Brash accepts all genres from artists worldwide.</strong> Every submission is listened to by a human. No bots. No auto-rejections. We respond within 48 hours.
+    </p>
+    <div class="genre-tags">
+      <span class="genre-tag active">Afrobeats</span>
+      <span class="genre-tag">Hip-Hop</span>
+      <span class="genre-tag">R&B</span>
+      <span class="genre-tag">Electronic</span>
+      <span class="genre-tag">Indie</span>
+      <span class="genre-tag">Drill</span>
+      <span class="genre-tag">Pop</span>
+      <span class="genre-tag">Amapiano</span>
+      <span class="genre-tag">Latin</span>
+      <span class="genre-tag">Metal</span>
+      <span class="genre-tag">Country</span>
+      <span class="genre-tag">K-Pop</span>
+      <span class="genre-tag">Jazz</span>
+      <span class="genre-tag">Classical</span>
+    </div>
+    <p class="submit-side-text" style="font-size:0.82rem;">
+      Also available on <strong>SubmitHub</strong> — search <em>"Bass Brash"</em> to submit directly through their platform.
+    </p>
+  </div>
+  <div>
+    <div class="submit-form">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Artist / Stage Name</label>
+          <input type="text" placeholder="Your name"/>
+        </div>
+        <div class="form-field">
+          <label>Genre</label>
+          <select>
+            <option>Afrobeats</option>
+            <option>Hip-Hop</option>
+            <option>R&B / Soul</option>
+            <option>Electronic</option>
+            <option>Indie / Alternative</option>
+            <option>Drill</option>
+            <option>Pop</option>
+            <option>Amapiano</option>
+            <option>Latin</option>
+            <option>Metal</option>
+            <option>Country</option>
+            <option>K-Pop</option>
+            <option>Jazz</option>
+            <option>Classical Crossover</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Track / Release Title</label>
+        <input type="text" placeholder="What are you submitting?"/>
+      </div>
+      <div class="form-field">
+        <label>Music Link (Spotify, SoundCloud, YouTube etc)</label>
+        <input type="url" placeholder="https://"/>
+      </div>
+      <div class="form-field">
+        <label>Service Interested In</label>
+        <select>
+          <option>Artist Feature (£35)</option>
+          <option>Press Release (£55)</option>
+          <option>EPK (£95)</option>
+          <option>Playlist Pitching (£45)</option>
+          <option>Launch Bundle (£120)</option>
+          <option>Sync Licensing (15%)</option>
+          <option>SubmitHub Review</option>
+          <option>Just a review / consideration</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Tell Us About Your Music</label>
+        <textarea placeholder="What do you want people to feel? Who are your influences? Any context we should know?"></textarea>
+      </div>
+      <div class="form-field">
+        <label>Email Address</label>
+        <input type="email" placeholder="your@email.com"/>
+      </div>
+      <button class="btn-primary" onclick="handleSubmit(event)" style="width:100%; padding:1.2rem; font-size:0.9rem;">
+        Submit for Consideration →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- BEATS -->
+
+<section id="beats">
+  <p class="section-label">03 — Beat Marketplace</p>
+  <h2 class="section-title">Beats For Sale</h2>
+  <p style="color:var(--muted); max-width:500px; line-height:1.7; margin-top:0.5rem;">
+    Producers: list your beats free. Artists: buy direct. All licenses clear and immediate. Bass Brash takes 15% on every sale — no monthly fee.
+  </p>
+  <table class="beats-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Beat Name</th>
+        <th>Genre</th>
+        <th>BPM</th>
+        <th>Mood</th>
+        <th>Lease</th>
+        <th>Exclusive</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><button class="play-btn">▶</button></td>
+        <td><span class="beat-name">Midnight Lagos</span></td>
+        <td><span class="beat-genre">Afrobeats</span></td>
+        <td style="color:var(--muted); font-size:0.82rem;">98</td>
+        <td style="color:var(--muted); font-size:0.82rem;">Melodic</td>
+        <td><span class="beat-price">£25</span></td>
+        <td><span class="beat-price">£250</span></td>
+        <td><a href="#contact" class="btn-primary" style="font-size:0.7rem; padding:0.5rem 1rem;">Buy</a></td>
+      </tr>
+      <tr>
+        <td><button class="play-btn">▶</button></td>
+        <td><span class="beat-name">Cold Streets</span></td>
+        <td><span class="beat-genre">UK Drill</span></td>
+        <td style="color:var(--muted); font-size:0.82rem;">140</td>
+        <td style="color:var(--muted); font-size:0.82rem;">Dark</td>
+        <td><span class="beat-price">£30</span></td>
+        <td><span class="beat-price">£300</span></td>
+        <td><a href="#contact" class="btn-primary" style="font-size:0.7rem; padding:0.5rem 1rem;">Buy</a></td>
+      </tr>
+      <tr>
+        <td><button class="play-btn">▶</button></td>
+        <td><span class="beat-name">Solar Drift</span></td>
+        <td><span class="beat-genre">Electronic</span></td>
+        <td style="color:var(--muted); font-size:0.82rem;">124</td>
+        <td style="color:var(--muted); font-size:0.82rem;">Euphoric</td>
+        <td><span class="beat-price">£20</span></td>
+        <td><span class="beat-price">£200</span></td>
+        <td><a href="#contact" class="btn-primary" style="font-size:0.7rem; padding:0.5rem 1rem;">Buy</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="beats-cta">
+    <p>Are you a producer? List your beats on Bass Brash for free. We handle the marketplace.</p>
+    <a href="#contact" class="btn-outline">List Your Beats →</a>
+  </div>
+</section>
+
+<!-- SPOTLIGHT -->
+
+<section id="spotlight">
+  <p class="section-label">04 — This Week's Artists</p>
+  <h2 class="section-title">In The Spotlight</h2>
+  <div class="spotlight-grid">
+    <div class="spotlight-card">
+      <div class="spotlight-img" style="background:linear-gradient(135deg,#1a0a00,#3d1500);">🎵</div>
+      <div class="spotlight-body">
+        <p class="spotlight-genre">Afrobeats · Lagos</p>
+        <h3 class="spotlight-artist">Your Artist Here</h3>
+        <p class="spotlight-track">"Track Title" · 2024</p>
+      </div>
+    </div>
+    <div class="spotlight-card">
+      <div class="spotlight-img" style="background:linear-gradient(135deg,#001a0a,#003520);">🎤</div>
+      <div class="spotlight-body">
+        <p class="spotlight-genre">UK Drill · London</p>
+        <h3 class="spotlight-artist">Your Artist Here</h3>
+        <p class="spotlight-track">"Track Title" · 2024</p>
+      </div>
+    </div>
+    <div class="spotlight-open">
+      <div class="spotlight-open-icon">+</div>
+      <div class="spotlight-open-text">This Slot Is Open</div>
+      <div class="spotlight-open-price">£35</div>
+      <p style="font-size:0.75rem; color:var(--muted); margin-top:0.5rem;">Get your music featured here</p>
+      <a href="#submit" class="btn-primary" style="margin-top:1rem; font-size:0.75rem; padding:0.6rem 1.4rem;">Claim Slot</a>
+    </div>
+  </div>
+</section>
+
+<!-- REVENUE TRANSPARENCY -->
+
+<section id="revenue">
+  <p class="section-label">05 — How We Earn</p>
+  <h2 class="section-title">Every Revenue Stream</h2>
+  <p style="color:var(--muted); max-width:550px; line-height:1.7; margin-top:0.5rem;">Bass Brash operates across multiple revenue channels simultaneously — so the platform grows regardless of which service is most popular at any given time.</p>
+  <div class="revenue-grid">
+    <div class="revenue-card">
+      <div class="revenue-icon">📝</div>
+      <div class="revenue-title">Editorial Features</div>
+      <div class="revenue-desc">Paid artist spotlights, written reviews, and editorial placements.</div>
+      <div class="revenue-amount">£35–£150</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">📢</div>
+      <div class="revenue-title">Press Releases</div>
+      <div class="revenue-desc">Professional PR writing and distribution for single, EP & album drops.</div>
+      <div class="revenue-amount">£55 each</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">🎧</div>
+      <div class="revenue-title">SubmitHub Reviews</div>
+      <div class="revenue-desc">Artists submit via SubmitHub. Credits earned per review. Converts to cash.</div>
+      <div class="revenue-amount">Day 1 income</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">🎵</div>
+      <div class="revenue-title">Beat Sales Commission</div>
+      <div class="revenue-desc">15% on every beat sold via our marketplace. Zero cost to list.</div>
+      <div class="revenue-amount">15% passive</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">📋</div>
+      <div class="revenue-title">EPK Creation</div>
+      <div class="revenue-desc">Professional electronic press kits built to get artists booked.</div>
+      <div class="revenue-amount">£95–£150</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">🎬</div>
+      <div class="revenue-title">Sync Licensing</div>
+      <div class="revenue-desc">Connect artists to film, TV, YouTube, and ad briefs. 15% on placement.</div>
+      <div class="revenue-amount">15% per deal</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">📊</div>
+      <div class="revenue-title">Playlist Pitching</div>
+      <div class="revenue-desc">Pitch tracks to real Spotify curators. Transparent campaign reporting.</div>
+      <div class="revenue-amount">£45 per run</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">🔗</div>
+      <div class="revenue-title">Affiliate Commissions</div>
+      <div class="revenue-desc">DistroKid, TuneCore, and music gear affiliates embedded in content.</div>
+      <div class="revenue-amount">Fully passive</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">🎤</div>
+      <div class="revenue-title">Virtual Showcases</div>
+      <div class="revenue-desc">Monthly live showcases. Artists pay for slots. Viewers attend free.</div>
+      <div class="revenue-amount">£60 per slot</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">🏢</div>
+      <div class="revenue-title">Studio Referrals</div>
+      <div class="revenue-desc">Partner studios pay 10–20% referral per booking made through Bass Brash.</div>
+      <div class="revenue-amount">10–20% cut</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">📰</div>
+      <div class="revenue-title">Banner Advertising</div>
+      <div class="revenue-desc">Music brands, equipment, courses, and software advertise to our audience.</div>
+      <div class="revenue-amount">£80+/month</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-icon">📦</div>
+      <div class="revenue-title">Launch Bundles</div>
+      <div class="revenue-desc">Feature + Press Release + Playlist Pitch combined at a premium package rate.</div>
+      <div class="revenue-amount">£120 bundle</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+
+<section id="about">
+  <div>
+    <p class="section-label">06 — About</p>
+    <h2 class="section-title">Built For Artists. Not Gatekeepers.</h2>
+    <div class="about-text">
+      <p>Bass Brash was built on one belief: <strong>great music exists everywhere</strong> — in Lagos, London, Seoul, São Paulo, and every city in between. The music industry was not built to serve those artists. We were.</p>
+      <p>We cover every genre without hierarchy. Afrobeats has the same platform as indie rock. Amapiano stands next to classical crossover. Because listeners don't stay in boxes, and neither should artists.</p>
+      <p>Every service we offer is <strong>delivered by real humans, with real feedback, in real time.</strong> No automation. No bots. No runaround.</p>
+    </div>
+  </div>
+  <div>
+    <div class="stats-grid">
+      <div class="stat-cell">
+        <div class="stat-number">15+</div>
+        <div class="stat-label">Genres Covered</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number">48h</div>
+        <div class="stat-label">Response Time</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number">12</div>
+        <div class="stat-label">Revenue Streams</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number">🌍</div>
+        <div class="stat-label">Global Platform</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT CTA -->
+
+<div id="contact">
+  <div class="contact-text">
+    Ready To Get<em>Your Music Heard?</em>
+  </div>
+  <div class="contact-actions">
+    <a href="#submit" class="btn-dark">Submit Music</a>
+    <a href="mailto:hello@bassbrash.com" class="btn-white">Email Us</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="footer-logo">BASS<span>BRASH</span></div>
+  <ul class="footer-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#beats">Beats</a></li>
+    <li><a href="#spotlight">Spotlight</a></li>
+    <li><a href="#submit">Submit</a></li>
+    <li><a href="mailto:hello@bassbrash.com">Contact</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 Bass Brash — bassbrash.com</p>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    }, 80);
+  });
+
+  // Waveform bars
+  const waveform = document.getElementById('waveform');
+  for (let i = 0; i < 80; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.animationDelay = (Math.random() * 1.4) + 's';
+    bar.style.animationDuration = (0.8 + Math.random() * 1.2) + 's';
+    waveform.appendChild(bar);
+  }
+
+  // Genre tag toggle
+  document.querySelectorAll('.genre-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      tag.classList.toggle('active');
+    });
+  });
+
+  // Notification popup
+  setTimeout(() => {
+    const notify = document.getElementById('notify');
+    notify.classList.add('show');
+    setTimeout(() => notify.classList.remove('show'), 5000);
+  }, 3000);
+
+  const notifications = [
+    { title: 'New submission received', sub: 'Drill · Birmingham, UK · just now' },
+    { title: 'Feature request', sub: 'Amapiano · Johannesburg · 1 min ago' },
+    { title: 'Beat purchased', sub: 'Hip-Hop · Brooklyn, US · 3 min ago' },
+    { title: 'Press release ordered', sub: 'Indie · Manchester · 5 min ago' },
+  ];
+  let notifyIdx = 0;
+  setInterval(() => {
+    const n = notifications[notifyIdx % notifications.length];
+    const notify = document.getElementById('notify');
+    notify.querySelector('.notify-title').innerHTML = `<span class="notify-dot"></span>${n.title}`;
+    notify.querySelector('.notify-sub').textContent = n.sub;
+    notify.classList.add('show');
+    setTimeout(() => notify.classList.remove('show'), 4000);
+    notifyIdx++;
+  }, 12000);
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target;
+    btn.textContent = '✓ Received — We\'ll be in touch within 48 hours';
+    btn.style.background = 'var(--green)';
+    btn.style.color = 'var(--black)';
+  }
+
+  // Smooth cursor on hover
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+      cursor.style.background = 'var(--gold)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      cursor.style.background = 'var(--orange)';
+    });
+  });
+</script>
+
+</body>
+</html>
